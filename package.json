@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "markmap-lib": "^0.16.1",
+    "markmap-render": "^0.17.0",
+    "yaml-front-matter": "^4.1.1"
+  }
+}

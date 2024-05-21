@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css" />
+    <meta charset="UTF-8" />
+    <title>MapMaster Chat</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css" />
+  </head>
+  <body>
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <div id="sidebar">
+          <h2>Project</h2>
+          <a href="/templates/index.html" class="active">MapMaster Chat</a>
+<a href="/templates/acc5298da7e6c28972547fee04ae882f6ee7f582566e2f78d23b63253c8a4741.html">Spider-Man</a>
+<a href="/templates/4638dc9aab9e7422a3632098471765a445a6e8c61316e5cde4dea4ca7538b969.html">Impresionismo Español</a>
+<a href="/templates/bc8c3cc3d2caf61eba4bc498daf9134c68a952ed645fc62d443d111f3f8904ba.html">Arte Abstracto Español</a>
+<a href="/templates/9a7f018817c8ff030971229e20b1b07b4d84ad6ef94621bf3382a1da9ffe3a93.html">Daredevil</a>
+
+        </div>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+    <div class="container">
+      <h1 class="mt-5">Chat con MapMaster</h1>
+      <form id="chatForm">
+        <div class="form-group">
+          <label for="message">Mensaje:</label>
+          <textarea
+            class="form-control"
+            id="message"
+            name="message"
+            required
+            rows="5"
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send</button>
+      </form>
+      <div class="mt-5" id="response-container">
+        <h2>Respuesta</h2>
+        <pre id="response"></pre>
+      </div>
+      <div id="loading">Cargando...</div>
+    </div>
+
+    <div id="settings">⚙️</div>
+    <div id="settings-menu">
+      <ul>
+        <li>
+          <a href="#" onclick="showDeleteMapDialog()"
+            >Eliminar Mapas Mentales</a
+          >
+        </li>
+        <li>
+          <a href="#" onclick="regenerateContent()">Regenerar contenido</a>
+        </li>
+      </ul>
+    </div>
+
+    <script>
+      document
+        .getElementById("chatForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const messageInput = document.getElementById("message");
+          const message = messageInput.value;
+          const responseContainer = document.getElementById("response");
+          const loadingIndicator = document.getElementById("loading");
+          const formData = new FormData();
+          formData.append("message", message);
+
+          loadingIndicator.style.display = "block";
+          responseContainer.textContent = "";
+
+          fetch("/send_message", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              loadingIndicator.style.display = "none";
+              if (data.markdown) {
+                responseContainer.textContent = data.markdown;
+              } else if (data.status) {
+                responseContainer.textContent = data.status;
+              }
+            })
+            .catch((error) => {
+              loadingIndicator.style.display = "none";
+              console.error("Error:", error);
+            });
+
+          messageInput.value = ""; // Clear the input field after sending the message
+        });
+
+      document
+        .getElementById("settings")
+        .addEventListener("click", function () {
+          const settingsMenu = document.getElementById("settings-menu");
+          if (settingsMenu.style.display === "none") {
+            settingsMenu.style.display = "block";
+          } else {
+            settingsMenu.style.display = "none";
+          }
+        });
+
+      function showDeleteMapDialog() {
+        fetch("/get_maps")
+          .then((response) => response.json())
+          .then((data) => {
+            let mapList = "<ul>";
+            data.maps.forEach((map) => {
+              mapList += `<li><span>${map.title}</span><button onclick="deleteMap('${map.filename}')">Eliminar</button></li>`;
+            });
+            mapList += "</ul>";
+            document.getElementById("response").innerHTML = mapList;
+          });
+      }
+
+      function deleteMap(filename) {
+        fetch(`/delete_map/${filename}`, { method: "DELETE" })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              alert("Mapa eliminado con éxito");
+              location.reload();
+            } else {
+              alert("Error al eliminar el mapa");
+            }
+          });
+      }
+
+      function regenerateContent() {
+        fetch("/regenerate_content", { method: "POST" })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              alert("Contenido regenerado con éxito");
+              location.reload();
+            } else {
+              alert("Error al regenerar el contenido");
+            }
+          });
+      }
+    </script>
+    <img id="logo" src="/static/assets/logo.png" alt="Logo" />
+    <img id="logo" src="/static/assets/logo.png" alt="Logo" />
+  <img id="logo" src="/static/assets/logo.png" alt="Logo">
+<img id="logo" src="/static/assets/logo.png" alt="Logo">
+<img id="logo" src="/static/assets/logo.png" alt="Logo">
+<img id="logo" src="/static/assets/logo.png" alt="Logo">
+<img id="logo" src="/static/assets/logo.png" alt="Logo">
+<img id="logo" src="/static/assets/logo.png" alt="Logo">
+<img id="logo" src="/static/assets/logo.png" alt="Logo">
+<img id="logo" src="/static/assets/logo.png" alt="Logo">
+<img id="logo" src="/static/assets/logo.png" alt="Logo">
+<img id="logo" src="/static/assets/logo.png" alt="Logo">
+</body>
+</html>
